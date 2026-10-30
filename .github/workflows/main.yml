@@ -1,0 +1,45 @@
+
+name: Build GSeriesLab Audio Unit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: macos-15
+
+    steps:
+      - name: Download project
+        uses: actions/checkout@v4
+
+      - name: Download JUCE
+        run: |
+          git clone --depth 1 --branch 8.0.10 https://github.com/juce-framework/JUCE.git "$HOME/JUCE"
+
+      - name: Configure for Apple Silicon
+        run: |
+          cmake -S . -B build -G Xcode \
+            -DJUCE_DIR="$HOME/JUCE" \
+            -DCMAKE_OSX_ARCHITECTURES=arm64 \
+            -DCMAKE_BUILD_TYPE=Release
+
+      - name: Compile Audio Unit
+        run: |
+          cmake --build build --config Release --target GSeriesLab_AU
+
+      - name: Package plugin
+        run: |
+          mkdir -p output
+          find build -name "*.component" -type d -exec cp -R {} output/ \;
+          if [ -z "$(find output -name '*.component' -type d -print -quit)" ]; then
+            echo "Audio Unit component not found"
+            exit 1
+          fi
+
+      - name: Downloadable plugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: GSeriesLab-Mac-M2
+          path: output/
