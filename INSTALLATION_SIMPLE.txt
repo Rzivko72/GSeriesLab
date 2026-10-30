@@ -1,0 +1,20 @@
+GSeries Lab - compilation gratuite sur GitHub
+
+1. Sur github.com, cliquer sur + puis New repository.
+2. Nommer le depot GSeriesLab, choisir Public, puis Create repository.
+3. Ouvrir le depot et choisir Add file > Upload files.
+4. IMPORTANT : GitHub ne permet pas toujours de televerser un dossier cache .github par le navigateur.
+   Pour ce cas, utiliser Add file > Create new file et saisir exactement :
+   .github/workflows/build-au.yml
+   Copier le contenu du fichier build-au.yml de cette archive.
+5. Televerser a la racine les fichiers CMakeLists.txt et Source/PluginProcessor.cpp et .h.
+   Le dossier Source doit etre conserve.
+6. Onglet Actions > Compiler GSeries Lab Audio Unit > Run workflow.
+7. Quand le job est termine, ouvrir le job puis telecharger GSeriesLab-AU-M2.
+8. Dezipper deux fois si necessaire, copier le fichier .component dans :
+   ~/Library/Audio/Plug-Ins/Components/
+9. Relancer Logic Pro et ouvrir Gestionnaire de modules pour valider le plugin.
+
+ATTENTION : projet experimental non compile ni teste dans cet environnement.
+GitHub peut refuser de lancer une action si les parametres du compte la desactivent.
+Les plugins non signes peuvent declencher des avertissements de macOS.
